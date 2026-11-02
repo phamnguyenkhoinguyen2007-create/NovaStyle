@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Style - Thời Trang Ứng Dụng & Xu Hướng</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: '#F8F6F0',
+                        accent: '#8A704C',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-beige { background-color: #F8F6F0; }
+        .text-accent { color: #8A704C; }
+        .bg-accent { background-color: #8A704C; }
+        .border-accent { border-color: #8A704C; }
+        
+        /* Custom scrollbar for cart drawer */
+        .cart-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .cart-scroll::-webkit-scrollbar-thumb {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen relative">
+
+    <!-- 1. TOP BAR (Hotline & Slogan) -->
+    <div class="bg-black text-white text-xs md:text-sm py-2 px-4 flex flex-wrap justify-between items-center gap-2">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-phone text-amber-400"></i>
+            <span>Hotline tư vấn (15p): <a href="tel:0908123456" class="text-amber-400 font-bold hover:underline">0908 123 456</a></span>
+        </div>
+        <div class="hidden md:block italic text-gray-300">
+            "Mặc chất riêng, tự tin mỗi ngày"
+        </div>
+        <div class="flex items-center space-x-4">
+            <span><i class="fa-solid fa-truck-fast text-amber-400 mr-1"></i> Giao hàng toàn quốc</span>
+            <span><i class="fa-solid fa-rotate-left text-emerald-400 mr-1"></i> Đổi trả dễ dàng</span>
+        </div>
+    </div>
+
+    <!-- 2. HEADER & NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <span class="text-2xl font-black tracking-widest text-black">NOVA STYLE</span>
+                <i class="fa-solid fa-star text-xs text-amber-500"></i>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#home" class="hover:text-amber-700 transition">Trang Chủ</a>
+                <a href="#seasonal" class="hover:text-amber-700 transition">Bộ Sưu Tập Theo Mùa</a>
+                <a href="#products" class="hover:text-amber-700 transition">Sản Phẩm & Bảng Giá</a>
+                <a href="#commitments" class="hover:text-amber-700 transition">Cam Kết & Chính Sách</a>
+            </nav>
+
+            <!-- User Actions -->
+            <div class="flex items-center space-x-3">
+                <div class="relative hidden sm:block">
+                    <input type="text" id="searchInput" onkeyup="handleQuickSearch()" placeholder="Tìm sản phẩm..." class="pl-8 pr-3 py-1.5 text-xs bg-gray-100 rounded-full border border-transparent focus:border-gray-300 focus:bg-white focus:outline-none transition w-36 focus:w-52">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                </div>
+                <button onclick="toggleCartDrawer()" class="relative text-gray-700 hover:text-black p-2 rounded-full hover:bg-gray-100 transition" title="Xem giỏ hàng">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold scale-100 transition-transform">0</span>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-700 hover:text-black p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 px-4 py-3 space-y-2 text-sm font-medium">
+            <a href="#home" onclick="toggleMobileMenu()" class="block py-1 hover:text-amber-700">Trang Chủ</a>
+            <a href="#seasonal" onclick="toggleMobileMenu()" class="block py-1 hover:text-amber-700">Bộ Sưu Tập Theo Mùa</a>
+            <a href="#products" onclick="toggleMobileMenu()" class="block py-1 hover:text-amber-700">Sản Phẩm & Bảng Giá</a>
+            <a href="#commitments" onclick="toggleMobileMenu()" class="block py-1 hover:text-amber-700">Cam Kết & Chính Sách</a>
+        </div>
+    </header>
+
+    <!-- 3. HERO BANNER & XU HƯỚNG THEO MÙA -->
+    <section id="seasonal" class="bg-beige py-12 md:py-16 transition-all duration-500">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="md:w-1/2 space-y-4">
+                <div class="inline-flex items-center bg-white px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-amber-800 shadow-sm border border-amber-100">
+                    <span id="season-badge" class="mr-1">✨ XU HƯỚNG BỘ SƯU TẬP</span>
+                </div>
+                <h1 id="hero-title" class="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+                    Thời Trang Xu Hướng Thu - Đông 2026
+                </h1>
+                <p id="hero-desc" class="text-gray-600 text-sm md:text-base leading-relaxed">
+                    Phong cách phối layer thanh lịch, tối giản. Các dòng áo khoác nhẹ, cardigan len mềm mại và quần jeans đứng dáng tôn chiều cao.
+                </p>
+
+                <!-- Seasonal Switcher Tabs -->
+                <div class="pt-4 flex items-center space-x-3">
+                    <span class="text-xs font-bold uppercase text-gray-400">Chọn Mùa:</span>
+                    <button onclick="switchSeason('autumn')" id="btn-autumn" class="px-4 py-2 rounded-lg text-sm font-medium bg-black text-white shadow-md transition">
+                        🍁 Thu - Đông
+                    </button>
+                    <button onclick="switchSeason('summer')" id="btn-summer" class="px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition">
+                        ☀️ Xuân - Hè
+                    </button>
+                </div>
+
+                <div class="pt-2 flex items-center gap-6 text-xs text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-600"></i>
+                        <span>Vải dệt cao cấp chống xù</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-600"></i>
+                        <span>Bảo hành đường may 30 ngày</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Hero Image -->
+            <div class="md:w-1/2 w-full flex justify-center">
+                <div class="relative w-full max-w-md aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-200">
+                    <img id="hero-img" 
+                         src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" 
+                         alt="Nova Style Hero Thu Dong" 
+                         class="w-full h-full object-cover transition-all duration-700 hover:scale-105">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. DANH MỤC SẢN PHẨM & BẢNG GIÁ NIÊM YẾT RÕ RÀNG -->
+    <section id="products" class="py-16 container mx-auto px-4">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+            <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Sản Phẩm & Giá Niêm Yết</h2>
+            <p class="text-gray-500 text-sm mt-2">Thông tin minh bạch, giá niêm yết chuẩn, hình ảnh chân thực 100%.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-10 text-sm">
+            <button onclick="filterCategory('all', this)" class="cat-btn bg-black text-white px-4 py-2 rounded-full font-medium transition shadow-sm">Tất Cả</button>
+            <button onclick="filterCategory('basic', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Áo Basic</button>
+            <button onclick="filterCategory('shirt', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Sơ Mi & Áo Kiểu</button>
+            <button onclick="filterCategory('pants', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Quần Ống Suông / Jeans</button>
+            <button onclick="filterCategory('jacket', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Áo Khoác</button>
+            <button onclick="filterCategory('dress', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Váy / Đầm</button>
+            <button onclick="filterCategory('acc', this)" class="cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition">Phụ Kiện</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Item 1: Áo Basic -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="basic" data-name="áo thun cotton basic oversize">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80" 
+                         alt="Áo thun basic" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: TS-01</span>
+                    <span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Best seller</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Áo Basic</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Áo Thun Cotton Basic Oversize</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Chất cotton 100% co giãn, thoáng mát, dễ phối đồ.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">129.000đ – 189.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Áo Thun Cotton Basic Oversize', 129000, 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2: Sơ Mi -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="shirt" data-name="sơ mi form rộng thanh lịch">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=600&q=80" 
+                         alt="Sơ mi form rộng" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: SM-02</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Sơ Mi & Áo Kiểu</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Sơ Mi Form Rộng Thanh Lịch</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Phong cách ứng dụng phù hợp đi học và đi làm.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">220.000đ – 350.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Sơ Mi Form Rộng Thanh Lịch', 220000, 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3: Quần -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="pants" data-name="quần ống suông hack dáng jeans">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80" 
+                         alt="Quần ống suông" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: QN-03</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Quần Dài / Jeans</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Quần Ống Suông Hack Dáng</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Form đứng dáng tôn chiều cao, chất vải đứng phom.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">249.000đ – 399.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Quần Ống Suông Hack Dáng', 249000, 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4: Áo khoác -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="jacket" data-name="áo khoác nhẹ layer thu đông">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80" 
+                         alt="Áo khoác nhẹ" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: AK-04</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Áo Khoác</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Áo Khoác Nhẹ Layer Thu - Đông</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Phong cách trẻ trung, giữ ấm nhẹ nhàng cho thời tiết lạnh.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">299.000đ – 449.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Áo Khoác Nhẹ Layer Thu - Đông', 299000, 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5: Váy Đầm -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="dress" data-name="đầm tối giản dạo phố">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=600&q=80" 
+                         alt="Váy đầm" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: VD-05</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Váy / Đầm</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Đầm Tối Giản Dạo Phố</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Thiết kế tinh tế, ứng dụng linh hoạt nhiều hoàn cảnh.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">280.000đ – 450.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Đầm Tối Giản Dạo Phố', 280000, 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6: Phụ Kiện -->
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group" data-category="acc" data-name="túi đeo vai thắt lưng phối đồ phụ kiện">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80" 
+                         alt="Túi xách phụ kiện" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2.5 py-1 rounded shadow-sm">Mã: PK-06</span>
+                </div>
+                <div class="p-4 flex flex-col flex-grow justify-between">
+                    <div>
+                        <span class="text-xs text-amber-700 font-semibold uppercase tracking-wider">Phụ Kiện</span>
+                        <h3 class="font-semibold text-gray-900 mt-1 line-clamp-1">Túi Đeo Vai & Thắt Lưng Phối Đồ</h3>
+                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">Hoàn thiện outfit thời trang hiện đại.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Giá niêm yết:</span>
+                            <span class="text-base font-bold text-gray-900">80.000đ – 200.000đ</span>
+                        </div>
+                        <button onclick="addToCart('Túi Đeo Vai Phối Đồ', 150000, 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80')" class="bg-black text-white text-xs px-3.5 py-2 rounded-lg hover:bg-amber-800 transition shadow-sm active:scale-95">
+                            <i class="fa-solid fa-plus mr-1"></i>Thêm Giỏ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5. BẢNG TƯ VẤN SIZE & TRẢI NGHIỆM KHÁCH HÀNG -->
+    <section id="commitments" class="bg-stone-100 py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-xl mx-auto mb-12">
+                <h2 class="text-2xl font-bold text-gray-900">Cam Kết Từ Nova Style</h2>
+                <p class="text-sm text-gray-500 mt-1">Trải nghiệm mua sắm an tâm & dịch vụ chăm sóc tận tâm.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2">Tư Vấn Size Chuẩn Xác</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Hỗ trợ tư vấn size theo chiều cao, cân nặng và số đo riêng. Phản hồi thắc mắc nhanh chóng trong vòng 15 phút.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2">Hình Ảnh Chân Thực 100%</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Ảnh tự chụp sản phẩm thật, thể hiện trung thực độ rủ, chất liệu vải và chi tiết đường may.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition text-center">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <h3 class="font-semibold text-base mb-2">Đổi Trả Minh Bạch</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Đổi mới miễn phí khi phát sinh lỗi từ nhà sản xuất hoặc giao sai size. Quy trình minh bạch, lịch sự.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FOOTER -->
+    <footer class="bg-black text-white pt-12 pb-8 mt-auto">
+        <div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8 text-sm">
+            <div class="space-y-3">
+                <h3 class="text-xl font-bold tracking-widest text-white">NOVA STYLE</h3>
+                <p class="text-gray-400 text-xs leading-relaxed">
+                    Shop thời trang trực tuyến dành cho người trẻ. Định hướng thời trang ứng dụng – dễ phối, dễ chọn, giá hợp lý.
+                </p>
+                <div class="flex space-x-3 text-gray-400 pt-2">
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook text-lg"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram text-lg"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-tiktok text-lg"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-3 text-amber-400">Danh Mục Sản Phẩm</h4>
+                <ul class="space-y-2 text-xs text-gray-300">
+                    <li><a href="#products" onclick="filterCategory('basic')" class="hover:underline">Áo thun basic</a></li>
+                    <li><a href="#products" onclick="filterCategory('shirt')" class="hover:underline">Sơ mi & Áo kiểu</a></li>
+                    <li><a href="#products" onclick="filterCategory('pants')" class="hover:underline">Quần ống suông / Jeans</a></li>
+                    <li><a href="#products" onclick="filterCategory('jacket')" class="hover:underline">Áo khoác nhẹ</a></li>
+                    <li><a href="#products" onclick="filterCategory('dress')" class="hover:underline">Váy & Đầm hằng ngày</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-3 text-amber-400">Hỗ Trợ Khách Hàng</h4>
+                <ul class="space-y-2 text-xs text-gray-300">
+                    <li><a href="#commitments" class="hover:underline">Hướng dẫn chọn Size</a></li>
+                    <li><a href="#commitments" class="hover:underline">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="hover:underline">Phương thức thanh toán (COD / CK)</a></li>
+                    <li><a href="#" class="hover:underline">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-3 text-amber-400">Liên Hệ Nova Style</h4>
+                <div class="space-y-2 text-xs text-gray-300">
+                    <p><i class="fa-solid fa-phone mr-2 text-amber-400"></i>Hotline: <strong>0908 123 456</strong></p>
+                    <p><i class="fa-solid fa-clock mr-2 text-amber-400"></i>Giờ làm việc: 8:00 – 21:00</p>
+                    <p><i class="fa-solid fa-envelope mr-2 text-amber-400"></i>Email: cskh@novastyle.com</p>
+                    <p><i class="fa-solid fa-location-dot mr-2 text-amber-400"></i>Hà Nội & TP. Hồ Chí Minh</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 container mx-auto px-4 pt-6 text-center text-xs text-gray-500">
+            <p>&copy; 2026 Nova Style. All rights reserved. Thiết kế dựa trên Kế hoạch kinh doanh Cửa hàng thời trang Nova Style.</p>
+        </div>
+    </footer>
+
+    <!-- SLIDE-OVER CART DRAWER -->
+    <div id="cart-drawer-backdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-bag-shopping text-gray-800"></i>
+                <h3 class="font-bold text-gray-900">Giỏ Hàng Của Bạn</h3>
+                <span id="drawer-cart-count-badge" class="text-xs bg-black text-white px-2 py-0.5 rounded-full">0</span>
+            </div>
+            <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-black p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="p-4 flex-grow overflow-y-auto cart-scroll space-y-3">
+            <div id="empty-cart-msg" class="text-center py-16 text-gray-400">
+                <i class="fa-solid fa-basket-shopping text-4xl mb-3 block"></i>
+                <p class="text-sm">Chưa có sản phẩm nào trong giỏ hàng.</p>
+                <button onclick="toggleCartDrawer()" class="mt-4 px-4 py-2 bg-black text-white text-xs font-semibold rounded-lg hover:bg-gray-800">
+                    Khám phá sản phẩm ngay
+                </button>
+            </div>
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-4 border-t border-gray-100 bg-gray-50 space-y-3">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600">Tạm tính:</span>
+                <span id="cart-subtotal" class="font-bold text-base text-gray-900">0đ</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-emerald-600 font-medium">
+                <span><i class="fa-solid fa-truck mr-1"></i> Miễn phí vận chuyển đơn từ 300k</span>
+                <span id="shipping-status">Chưa đủ điều kiện</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-amber-800 transition active:scale-[0.98] shadow-md flex items-center justify-center space-x-2">
+                <span>Tiến Hành Đặt Hàng</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-black text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">Đã thêm vào giỏ hàng!</span>
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ CHỨC NĂNG -->
+    <script>
+        // State
+        let cart = [];
+
+        // Chuyển đổi bộ sưu tập theo mùa
+        function switchSeason(season) {
+            const title = document.getElementById('hero-title');
+            const desc = document.getElementById('hero-desc');
+            const img = document.getElementById('hero-img');
+            const badge = document.getElementById('season-badge');
+            const btnAutumn = document.getElementById('btn-autumn');
+            const btnSummer = document.getElementById('btn-summer');
+
+            if (season === 'autumn') {
+                badge.innerText = '✨ BỘ SƯU TẬP THU - ĐÔNG';
+                title.innerText = 'Thời Trang Xu Hướng Thu - Đông 2026';
+                desc.innerText = 'Phong cách phối layer thanh lịch, tối giản. Các dòng áo khoác nhẹ, cardigan len mềm mại và quần jeans đứng dáng tôn chiều cao.';
+                img.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80';
+                btnAutumn.className = 'px-4 py-2 rounded-lg text-sm font-medium bg-black text-white shadow-md transition';
+                btnSummer.className = 'px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition';
+            } else {
+                badge.innerText = '☀️ BỘ SƯU TẬP XUÂN - HÈ';
+                title.innerText = 'Thời Trang Nhẹ Nhàng & Thoáng Mát Xuân - Hè';
+                desc.innerText = 'Trang phục ứng dụng linh hoạt cho ngày hè rực rỡ. Chất liệu cotton co giãn, màu sắc tươi sáng, dễ phối đồ đi học và đi chơi.';
+                img.src = 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80';
+                btnSummer.className = 'px-4 py-2 rounded-lg text-sm font-medium bg-black text-white shadow-md transition';
+                btnAutumn.className = 'px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 transition';
+            }
+        }
+
+        // Lọc danh mục sản phẩm
+        function filterCategory(category, targetBtn) {
+            const cards = document.querySelectorAll('.product-card');
+            const buttons = document.querySelectorAll('.cat-btn');
+
+            buttons.forEach(btn => {
+                btn.className = 'cat-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full font-medium transition';
+            });
+
+            if (targetBtn) {
+                targetBtn.className = 'cat-btn bg-black text-white px-4 py-2 rounded-full font-medium transition shadow-sm';
+            }
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Tìm kiếm nhanh sản phẩm
+        function handleQuickSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.product-card');
+
+            cards.forEach(card => {
+                const name = card.dataset.name || '';
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Thêm vào giỏ hàng
+        function addToCart(name, price, img) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    img: img,
+                    qty: 1
+                });
+            }
+            updateCartUI();
+            showToast(`Đã thêm "${name}" vào giỏ hàng!`);
+        }
+
+        // Tăng giảm số lượng trong giỏ
+        function changeQty(name, delta) {
+            const item = cart.find(i => i.name === name);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.name !== name);
+            }
+            updateCartUI();
+        }
+
+        // Cập nhật giao diện giỏ hàng
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            document.getElementById('cart-count').innerText = totalItems;
+            document.getElementById('drawer-cart-count-badge').innerText = totalItems;
+            document.getElementById('cart-subtotal').innerText = totalPrice.toLocaleString('vi-VN') + 'đ';
+
+            // Shipping status
+            const shippingStatus = document.getElementById('shipping-status');
+            if (totalPrice >= 300000) {
+                shippingStatus.innerText = 'Được Freeship!';
+                shippingStatus.className = 'text-xs text-emerald-600 font-bold';
+            } else if (totalPrice > 0) {
+                shippingStatus.innerText = `Mua thêm ${(300000 - totalPrice).toLocaleString('vi-VN')}đ để freeship`;
+                shippingStatus.className = 'text-xs text-amber-600 font-medium';
+            } else {
+                shippingStatus.innerText = 'Chưa đủ điều kiện';
+                shippingStatus.className = 'text-xs text-gray-400';
+            }
+
+            // Render items
+            const container = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div id="empty-cart-msg" class="text-center py-16 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3 block"></i>
+                        <p class="text-sm">Chưa có sản phẩm nào trong giỏ hàng.</p>
+                        <button onclick="toggleCartDrawer()" class="mt-4 px-4 py-2 bg-black text-white text-xs font-semibold rounded-lg hover:bg-gray-800">
+                            Khám phá sản phẩm ngay
+                        </button>
+                    </div>
+                `;
+            } else {
+                let html = '';
+                cart.forEach(item => {
+                    html += `
+                        <div class="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100">
+                            <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                            <div class="flex-grow min-w-0">
+                                <h4 class="text-xs font-semibold text-gray-900 truncate">${item.name}</h4>
+                                <p class="text-xs font-bold text-amber-800 mt-1">${item.price.toLocaleString('vi-VN')}đ</p>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <button onclick="changeQty('${item.name}', -1)" class="w-5 h-5 bg-white border border-gray-300 rounded flex items-center justify-center text-xs font-bold hover:bg-gray-100">-</button>
+                                    <span class="text-xs font-bold px-1">${item.qty}</span>
+                                    <button onclick="changeQty('${item.name}', 1)" class="w-5 h-5 bg-white border border-gray-300 rounded flex items-center justify-center text-xs font-bold hover:bg-gray-100">+</button>
+                                </div>
+                            </div>
+                            <button onclick="changeQty('${item.name}', -999)" class="text-gray-400 hover:text-red-500 p-2 text-xs" title="Xóa">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            }
+        }
+
+        // Đóng/Mở Giỏ hàng Drawer
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const backdrop = document.getElementById('cart-drawer-backdrop');
+            
+            const isOpen = !drawer.classList.contains('translate-x-full');
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+                backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+                backdrop.classList.add('opacity-100', 'pointer-events-auto');
+            }
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toast thông báo
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }, 2500);
+        }
+
+        // Tiến hành đặt hàng
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Giỏ hàng đang trống! Vui lòng chọn sản phẩm trước khi thanh toán.');
+                return;
+            }
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            alert(`Cảm ơn bạn! Đơn hàng gồm ${cart.length} món với tổng giá trị ${total.toLocaleString('vi-VN')}đ đang được chuyển đến bộ phận CSKH để xác nhận qua Hotline 0908 123 456.`);
+        }
+    </script>
+</body>
+</html>
